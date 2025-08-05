@@ -1,38 +1,199 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 .App {
-    text-align: center;
+  text-align: left;
 }
 
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/* Custom scrollbar for logs */
+.logs-container::-webkit-scrollbar {
+  width: 8px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.logs-container::-webkit-scrollbar-track {
+  background: #1f2937;
 }
 
-.App-header {
-    background-color: #0f0f10;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+.logs-container::-webkit-scrollbar-thumb {
+  background: #4b5563;
+  border-radius: 4px;
 }
 
-.App-link {
-    color: #61dafb;
+.logs-container::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;
 }
 
-@keyframes App-logo-spin {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
+/* Animation for status indicators */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.status-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Custom styles for bot cards */
+.bot-card {
+  transition: all 0.2s ease-in-out;
+}
+
+.bot-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Log terminal styling */
+.log-terminal {
+  background: #0d1117;
+  color: #58a6ff;
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  line-height: 1.4;
+}
+
+.log-terminal .log-timestamp {
+  color: #7d8590;
+}
+
+.log-terminal .log-level-error {
+  color: #f85149;
+}
+
+.log-terminal .log-level-warning {
+  color: #f0883e;
+}
+
+.log-terminal .log-level-info {
+  color: #79c0ff;
+}
+
+.log-terminal .log-level-debug {
+  color: #8b949e;
+}
+
+/* Metrics cards */
+.metric-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.metric-card.cpu {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.metric-card.memory {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
+.metric-card.disk {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+
+.metric-card.bots {
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+}
+
+/* Loading spinner */
+.spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Connection status indicator */
+.connection-indicator {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.connection-indicator::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: currentColor;
+}
+
+.connection-indicator.connected::before {
+  background-color: #10b981;
+  animation: pulse 2s infinite;
+}
+
+.connection-indicator.disconnected::before {
+  background-color: #ef4444;
+}
+
+/* Bot status indicators */
+.status-running {
+  background-color: #10b981;
+  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+}
+
+.status-stopped {
+  background-color: #6b7280;
+}
+
+.status-error {
+  background-color: #ef4444;
+  box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
+}
+
+.status-starting {
+  background-color: #f59e0b;
+  animation: pulse 1s infinite;
+}
+
+.status-stopping {
+  background-color: #f97316;
+  animation: pulse 1s infinite;
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+  .grid-responsive {
+    grid-template-columns: 1fr;
+  }
+  
+  .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .dark-mode {
+    background-color: #111827;
+    color: #f9fafb;
+  }
+  
+  .dark-mode .bg-white {
+    background-color: #1f2937;
+  }
+  
+  .dark-mode .text-gray-900 {
+    color: #f9fafb;
+  }
+  
+  .dark-mode .text-gray-500 {
+    color: #9ca3af;
+  }
+  
+  .dark-mode .border-gray-200 {
+    border-color: #374151;
+  }
 }
