@@ -343,9 +343,14 @@ async def add_bot_log(bot_id: str, log_data: LogEntryCreate):
     await db.logs.insert_one(log_entry.dict())
     
     # Broadcast log to WebSocket clients
+    log_dict = log_entry.dict()
+    # Convert datetime to ISO string for JSON serialization
+    if 'timestamp' in log_dict:
+        log_dict['timestamp'] = log_dict['timestamp'].isoformat()
+    
     await manager.broadcast(json.dumps({
         "type": "log",
-        "data": log_entry.dict()
+        "data": log_dict
     }))
     
     return log_entry
