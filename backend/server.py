@@ -151,9 +151,14 @@ async def log_message(bot_id: str, level: str, message: str, source: str = "syst
     await db.logs.insert_one(log_entry.dict())
     
     # Broadcast log to WebSocket clients
+    log_data = log_entry.dict()
+    # Convert datetime to ISO string for JSON serialization
+    if 'timestamp' in log_data:
+        log_data['timestamp'] = log_data['timestamp'].isoformat()
+    
     await manager.broadcast(json.dumps({
         "type": "log",
-        "data": log_entry.dict()
+        "data": log_data
     }))
 
 def get_process_stats(pid: int) -> Dict[str, Any]:
