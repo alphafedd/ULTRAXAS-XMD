@@ -403,11 +403,25 @@ async def websocket_endpoint(websocket: WebSocket):
                 bots_with_stats.append(bot.dict())
             
             # Broadcast system update
+            metrics_data = metrics.dict()
+            # Convert datetime to ISO string for JSON serialization
+            if 'timestamp' in metrics_data:
+                metrics_data['timestamp'] = metrics_data['timestamp'].isoformat()
+            
+            # Convert datetime fields in bot data
+            bots_serializable = []
+            for bot_dict in bots_with_stats:
+                bot_copy = bot_dict.copy()
+                for key, value in bot_copy.items():
+                    if isinstance(value, datetime):
+                        bot_copy[key] = value.isoformat()
+                bots_serializable.append(bot_copy)
+            
             await manager.broadcast(json.dumps({
                 "type": "system_update",
                 "data": {
-                    "metrics": metrics.dict(),
-                    "running_bots": bots_with_stats
+                    "metrics": metrics_data,
+                    "running_bots": bots_serializable
                 }
             }))
             
